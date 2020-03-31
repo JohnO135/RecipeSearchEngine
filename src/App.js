@@ -1,24 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import Recipe from './Recipe'
 
-function App() {
-  return (
+const App = () => {
+  
+  //API ID and KEY required to make authenticated and verified queries
+  const APP_ID = '975eb510';
+  const APP_KEY = '3fd5ce701d54aca41a85f9e7170dc191';
+
+
+  const [recipes, setRecipes] = useState([]);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState('chicken');
+
+  //This will generate the actual queries and return JSON formatted response. The recipes state will then be set to an array of JSON objects
+  const getRecipes = async () => {
+      const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`);
+      const data = await response.json();
+      setRecipes(data.hits);
+    };
+  
+  //This will update the search value when the user is typing through the onChange EventListener
+  const updateSearch = e => {
+    setSearch(e.target.value);
+  }
+
+  //This will change the query state to whatever the new search value is and reset search to empty
+  const getSearch = e => {
+    e.preventDefault();
+    setQuery(search);
+    setSearch("");
+  }
+
+  //React Lifecylce method to only rerender when the query value changes. This will only happen upon form submit
+  useEffect(() => {
+    getRecipes();
+    console.log("Refreshed");
+  }, [query]);
+
+  
+
+  return(
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={getSearch} className="search-form">
+        <input className="search-bar" type="text" value={search} onChange={updateSearch}/>
+        <button className="search-button" type = "submit">Search</button>
+      </form>
+      <div className="recipes">
+      {recipes.map(recipe => (
+      <Recipe key={recipe.recipe.label} title={recipe.recipe.label} calories={recipe.recipe.calories} image={recipe.recipe.image} ingredients={recipe.recipe.ingredients}/>))}
+      </div>
     </div>
   );
 }
