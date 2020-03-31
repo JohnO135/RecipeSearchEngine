@@ -43,7 +43,8 @@ const App = () => {
   return(
     <div className="App">
       <form onSubmit={getSearch} className="search-form">
-        <input className="search-bar" type="text" value={search} onChange={updateSearch}/>
+        <label style={{fontWeight: 'bold', fontSize: 36, margin: 40}} for="searchBar">Recipe Finder</label>
+        <input id="searchBar" className="search-bar" type="text" placeholder = "Enter type of dish..."value={search} onChange={updateSearch}/>
         <button className="search-button" type = "submit">Search</button>
       </form>
       <div className="recipes">
@@ -53,7 +54,8 @@ const App = () => {
         title={recipe.recipe.label} 
         calories={recipe.recipe.calories} 
         image={recipe.recipe.image} 
-        ingredients={recipe.recipe.ingredients}/>))}
+        ingredients={recipe.recipe.ingredients}
+        url = {recipe.recipe.url}/>))}
       </div>
     </div>
   );

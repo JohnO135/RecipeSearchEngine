@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './recipe.module.css';
 
-const Recipe = ({title, calories,image, ingredients}) => {
+const Recipe = ({title, calories,image, ingredients, url}) => {
     return(
         <div className={style.recipe}>
             <h1>{title}</h1>
@@ -10,6 +10,7 @@ const Recipe = ({title, calories,image, ingredients}) => {
                 {ingredients.map(ingredient =>(<li>{ingredient.text}</li>))}
             </ol>
             <p>Calories: {Number.parseFloat(calories).toFixed(2)}</p>
+            <a href={url}>Click Here</a>
             <img className={style.image} src={image} alt=""></img>
         </div>
     );
